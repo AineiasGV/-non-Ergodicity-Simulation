@@ -1,8 +1,8 @@
 (*First part that gives the Markov Chain Properties and visualises the Markov Chain*)
-beta = 1;    (*Initial perception rate*)
-alpha = 0.4; (*Critical perception rate*)
+beta = 1;    (*initial perception rate*)
+alpha = 0.4; (*threshold or critical perception rate*)
 opportunisticSellerRate = 0.02;
-n = 1000;    (*Number of steps to simulate*)
+n = 1000;    (*number of steps to simulate*)
 transitionMatrix[beta_, 
    alpha_] := {{beta - alpha, 1 - (beta - alpha)}, {beta - alpha, 
     1 - (beta - alpha)}};
@@ -41,48 +41,13 @@ Graph[markovProcess[0.4[]], VertexLabels -> {1 -> "H", 2 -> "L"},
     Flatten@Table[DirectedEdge[i, j] -> sm[[i, j]], {i, 2}, {j, 2}]], 
  ImageSize -> Medium]
 
+
 (*Second part that visualises the process and plots the frequence of High-Quality products*)
+
+(*display plots*)
 *Parameters*) a = 0.4;
-timeSteps = 1000;  (*Number of steps for the simulation*)
-betaStart = 1;  (*Initial \[Beta] value*)
-opportunisticRate = 0.02;  (*2% of sellers are opportunistic*)
-movingAverageWindow = 
-  100; (*Window size for the moving average, 10 to 25% of the \
-timeSteps*)
-
-(*Function to simulate market behavior and calculate frequency of H \
-with moving average*)
-simulateMarketBehavior[betaInitial_] := 
-  Module[{beta, t, transitionMatrix, state, statesHistory, 
-    stateNumeric}, beta = betaInitial;
-   state = "H";
-   statesHistory = {state};
-   For[t = 1, t <= timeSteps, t++, 
-    If[RandomReal[] < opportunisticRate, 
-     beta = Max[beta - 0.1, 
-        a];  (*Decrease beta upon encountering an opportunistic \
-seller*)];
-    transitionMatrix = {{beta - a, 1 - (beta - a)}, {beta - a, 
-       1 - (beta - a)}};
-    stateProbabilities = 
-     If[state == "H", transitionMatrix[[1]], transitionMatrix[[2]]];
-    state = If[RandomReal[] < stateProbabilities[[1]], "H", "L"];
-    AppendTo[statesHistory, state];];
-   stateNumeric = Map[If[# == "H", 1, 0] &, statesHistory];
-   MovingAverage[stateNumeric, movingAverageWindow]];
-
-(*Run simulations and plot results together*)
-simulationResults = Table[simulateMarketBehavior[betaStart], {50}];
-frequencyHPlots = 
-  ListLinePlot[simulationResults, PlotRange -> {0, 1}, 
-   PlotLabels -> "Simulations, as \[Beta] starts at 1", Frame -> True,
-    FrameLabel -> {"Time Step", "Frequency of H"}, 
-   PlotLegends -> Automatic];
-
-(*Display the plots*)
-*Parameters*) a = 0.4;
-timeSteps = 1000;  (*Number of steps for the simulation*)
-betaStart = 1;  (*Initial \[Beta] value*)
+timeSteps = 1000;  (*number of steps for the simulation*)
+betaStart = 1;  (*initial \[Beta] value*)
 opportunisticRate = 0.02;  (*2% of sellers are opportunistic*)
 movingAverageWindow = 
   100; (*Window size for the moving average, 10 to 25% of the \
