@@ -47,13 +47,13 @@ Graph[markovProcess[0.4[]], VertexLabels -> {1 -> "H", 2 -> "L"},
 (*display plots*)
 *Parameters*) a = 0.4;
 timeSteps = 1000;  (*number of steps for the simulation*)
-betaStart = 1;  (*initial \[Beta] value*)
+betaStart = 1;  (*initial β (beta) value*)
 opportunisticRate = 0.02;  (*2% of sellers are opportunistic*)
 movingAverageWindow = 
-  100; (*Window size for the moving average, 10 to 25% of the \
+  100; (*window size for the moving average, 10 to 25% of the \
 timeSteps*)
 
-(*Function to simulate market behavior and calculate frequency of H \
+(*module to simulate market behavior and calculate frequency of H \
 with moving average*)
 simulateMarketBehavior[betaInitial_] := 
   Module[{beta, t, transitionMatrix, state, statesHistory, 
@@ -63,8 +63,7 @@ simulateMarketBehavior[betaInitial_] :=
    For[t = 1, t <= timeSteps, t++, 
     If[RandomReal[] < opportunisticRate, 
      beta = Max[beta - 0.1, 
-        a];  (*Decrease beta upon encountering an opportunistic \
-seller*)];
+        a];  (*decrease β (beta) upon encountering an opportunistic seller*)];
     transitionMatrix = {{beta - a, 1 - (beta - a)}, {beta - a, 
        1 - (beta - a)}};
     stateProbabilities = 
@@ -74,7 +73,7 @@ seller*)];
    stateNumeric = Map[If[# == "H", 1, 0] &, statesHistory];
    MovingAverage[stateNumeric, movingAverageWindow]];
 
-(*Run simulations and plot results together*)
+(*run simulations + plot results together*)
 simulationResults = Table[simulateMarketBehavior[betaStart], {50}];
 frequencyHPlots = 
   ListLinePlot[simulationResults, PlotRange -> {0, 1}, 
@@ -82,7 +81,7 @@ frequencyHPlots =
     FrameLabel -> {"Time Step", "Frequency of H"}, 
    PlotLegends -> Automatic];
 
-(*Display the plots*)
+(*display plots*)
 frequencyHPlots;
 initialExpectation = betaStart - a;
 initialExpPlot = 
