@@ -14,7 +14,7 @@ transitionMatrix[beta_,
 markovProcess[beta_] := 
   DiscreteMarkovProcess[1, transitionMatrix[beta, alpha]];
 simulationResults = 
-  Table[If[RandomReal[] < opportunisticSellerRate, 
+  Table[If[RandomReal[] < opportunisticSellerRate, (*RandomReal[]: a pseudorandom real number in the range 0 to 1*)
     beta = Max[beta - 0.1, alpha]];
    process = markovProcess[beta];
    RandomFunction[process, {0, 1}], {n}];
@@ -61,7 +61,7 @@ simulateMarketBehavior[betaInitial_] :=
    state = "H";
    statesHistory = {state};
    For[t = 1, t <= timeSteps, t++, 
-    If[RandomReal[] < opportunisticRate, 
+    If[RandomReal[] < opportunisticRate, (*RandomReal[]: a pseudorandom real number in the range 0 to 1*)
      beta = Max[beta - 0.1, 
         a];  (*decrease β (beta) upon encountering an opportunistic seller*)];
     transitionMatrix = {{beta - a, 1 - (beta - a)}, {beta - a, 
